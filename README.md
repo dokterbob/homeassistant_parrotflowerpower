@@ -51,6 +51,31 @@ If you previously used the YAML-based configuration:
 2. Restart Home Assistant
 3. Add the integration via the UI as described above
 
+## Using with the Plant integration
+
+You can combine the sensors into a [Plant entity](https://www.home-assistant.io/integrations/plant/) for health monitoring with min/max thresholds. Add to `configuration.yaml`:
+
+```yaml
+plant:
+  my_flower:
+    sensors:
+      moisture: sensor.flower_power_soil_moisture
+      temperature: sensor.flower_power_air_temperature
+      conductivity: sensor.flower_power_soil_conductivity
+      brightness: sensor.flower_power_light_intensity
+      battery: sensor.flower_power_battery
+    min_moisture: 15
+    max_moisture: 55
+    min_conductivity: 100
+    max_conductivity: 1000
+    min_temperature: 10
+    max_temperature: 35
+    min_brightness: 2000
+    max_brightness: 50000
+```
+
+Adjust the entity IDs to match your device (check **Settings > Entities** for exact names) and set thresholds to suit your plant species.
+
 ## Resources
 
 - [WatchFlower](https://github.com/emericg/WatchFlower) — BLE protocol reference
