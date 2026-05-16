@@ -5,6 +5,7 @@ import logging
 
 from bleak import BleakClient
 from bleak.exc import BleakError
+from bleak_retry_connector import establish_connection
 
 from homeassistant.components import bluetooth
 from homeassistant.config_entries import ConfigEntry
@@ -81,8 +82,9 @@ class ParrotFlowerPowerCoordinator(DataUpdateCoordinator):
         data: dict[str, float | None] = {}
 
         try:
-            client = BleakClient(ble_device, timeout=30.0)
-            await client.connect()
+            client = await establish_connection(
+                BleakClient, ble_device, self.address
+            )
             try:
                 # Battery (uint8)
                 raw = await client.read_gatt_char(UUID_BATTERY)

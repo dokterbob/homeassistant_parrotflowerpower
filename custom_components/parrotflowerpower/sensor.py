@@ -8,7 +8,7 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, UnitOfIlluminance, UnitOfTemperature
+from homeassistant.const import PERCENTAGE, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
@@ -37,7 +37,7 @@ SENSOR_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         key="light",
         translation_key="light",
         name="Light Intensity",
-        native_unit_of_measurement=UnitOfIlluminance.LUX,
+        native_unit_of_measurement="lx",
         device_class=SensorDeviceClass.ILLUMINANCE,
         state_class=SensorStateClass.MEASUREMENT,
     ),
