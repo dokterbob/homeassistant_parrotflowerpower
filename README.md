@@ -1,33 +1,58 @@
 # Parrot Flower Power BLE sensor integration for Home Assistant
 
-It's sketchy but it works.
+A Home Assistant custom integration for Parrot Flower Power plant sensors via Bluetooth Low Energy. Supports ESPHome BLE proxies.
 
-Usage : 
-- Copy folder "parrotflowerpower" to /custom_components
-- Edit configuration.yaml by adding :
+## Sensors
 
-```yaml
-sensor:
-  - platform: parrotflowerpower
-    mac: 'A0:14:3D:xx:xx:xx'
-    name: "Flower Power xxxx"
-    scan_interval: 1800
-```
+- Air Temperature (°C)
+- Soil Temperature (°C)
+- Light Intensity (lux)
+- Soil Moisture (%)
+- Calibrated Moisture (%, firmware 1.1.0+)
+- Soil Conductivity (µS/cm)
+- Battery (%)
 
-Values for config :
-```yaml
-mac: the MAC address of the sensor
-name: the name of the sensor
-scan_interval: refresh interval in seconds (e.g. 1800 = every 30 mn)
-```
+## Requirements
 
-- Reboot Home Assistant
-- Check sensor values under Developer Tools section
-- You can also add a plant into configuration.yaml, as described here : https://www.home-assistant.io/integrations/plant/
+- Home Assistant 2023.9+
+- A Bluetooth adapter (local or ESPHome BLE proxy)
+- The device must be in BLE range of the adapter/proxy
 
-Useful and used resources :
-- https://www.home-assistant.io/integrations/miflora/
-- https://github.com/sandeepmistry/node-flower-power
-- https://forum.developer.parrot.com/t/simple-read-of-moisture-levels-via-cron-job-to-text-file/1599
-- https://github.com/BuBuaBu/flower-power-history/blob/master/index.js
-- https://www.fanjoe.be/?p=3520
+## Installation
+
+### HACS (recommended)
+
+1. Add this repository as a custom repository in HACS (Integration type)
+2. Install "Parrot Flower Power"
+3. Restart Home Assistant
+
+### Manual
+
+1. Copy the `custom_components/parrotflowerpower` folder to your Home Assistant `config/custom_components/` directory
+2. Restart Home Assistant
+
+## Configuration
+
+This integration uses the Home Assistant UI for setup (no YAML configuration).
+
+1. Go to **Settings > Integrations > Add Integration**
+2. Search for "Parrot Flower Power"
+3. Either:
+   - Select a discovered device from the list, or
+   - Enter the Bluetooth MAC address manually
+
+The device will be auto-discovered if your Bluetooth adapter or ESPHome BLE proxy can see it advertising.
+
+## Migrating from v1.x
+
+If you previously used the YAML-based configuration:
+
+1. Remove the `sensor: platform: parrotflowerpower` entry from `configuration.yaml`
+2. Restart Home Assistant
+3. Add the integration via the UI as described above
+
+## Resources
+
+- [WatchFlower](https://github.com/emericg/WatchFlower) — BLE protocol reference
+- [Home Assistant Plant](https://www.home-assistant.io/integrations/plant/) — use sensor data with HA's plant integration
+- [ESPHome Bluetooth Proxy](https://esphome.io/components/bluetooth_proxy/) — extend BLE range with ESP32
