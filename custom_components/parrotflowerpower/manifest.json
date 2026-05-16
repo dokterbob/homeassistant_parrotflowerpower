@@ -1,18 +1,19 @@
 {
   "domain": "parrotflowerpower",
-  "name": "Parrot Flower Power BLE sensor integration",
+  "name": "Parrot Flower Power",
   "documentation": "https://github.com/mbrentini/homeassistant_parrotflowerpower",
-  "issuetracker": "https://github.com/mbrentini/homeassistant_parrotflowerpower/issues",
-  "requirements": ["btlewrap==0.1.1"],
-  "dependencies": [],
+  "issue_tracker": "https://github.com/mbrentini/homeassistant_parrotflowerpower/issues",
+  "requirements": [],
+  "dependencies": ["bluetooth"],
   "codeowners": ["@mbrentini"],
-  "version": "1.0.2",
-  "config_flow": false,
+  "version": "2.0.0",
+  "config_flow": true,
   "iot_class": "local_polling",
   "loggers": ["custom_components.parrotflowerpower"],
   "bluetooth": [
     {
-      "local_name": "Flower power*"
+      "local_name": "Flower power*",
+      "connectable": true
     }
   ]
 }

@@ -1,0 +1,29 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "bluetooth_confirm": {
+        "title": "Confirm Device",
+        "description": "Do you want to set up {name}?",
+        "data": {}
+      },
+      "user": {
+        "title": "Select Device",
+        "description": "Select a Parrot Flower Power device to set up.",
+        "data": {
+          "address": "Device"
+        }
+      },
+      "manual": {
+        "title": "Manual Configuration",
+        "description": "Enter the Bluetooth MAC address of your Parrot Flower Power device.",
+        "data": {
+          "address": "Bluetooth MAC Address"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "This device is already configured."
+    }
+  }
+}
