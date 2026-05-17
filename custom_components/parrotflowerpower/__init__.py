@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import logging
+import random
+from datetime import timedelta
 
 from bleak import BleakClient
 from bleak.exc import BleakError
@@ -16,6 +18,8 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .const import (
     DOMAIN,
     DEFAULT_POLL_INTERVAL,
+    DEFAULT_POLL_JITTER_SECONDS,
+    DEFAULT_MAX_POLL_FAILURES,
     UUID_BATTERY,
     UUID_LIGHT,
     UUID_SOIL_CONDUCTIVITY,
@@ -63,15 +67,42 @@ class ParrotFlowerPowerCoordinator(DataUpdateCoordinator):
 
     def __init__(self, hass: HomeAssistant, address: str) -> None:
         """Initialize coordinator."""
+        # Add random jitter to stagger polling across multiple devices
+        jitter = timedelta(seconds=random.randint(0, DEFAULT_POLL_JITTER_SECONDS))
         super().__init__(
             hass,
             _LOGGER,
             name=f"Parrot Flower Power {address}",
-            update_interval=DEFAULT_POLL_INTERVAL,
+            update_interval=DEFAULT_POLL_INTERVAL + jitter,
         )
         self.address = address
+        self._consecutive_failures = 0
+        self._last_successful_data: dict[str, float | None] | None = None
 
     async def _async_update_data(self) -> dict[str, float | None]:
+        """Poll device with graceful handling of transient failures."""
+        try:
+            data = await self._poll_device()
+        except UpdateFailed:
+            self._consecutive_failures += 1
+            if (
+                self._consecutive_failures >= DEFAULT_MAX_POLL_FAILURES
+                or self._last_successful_data is None
+            ):
+                raise
+            _LOGGER.warning(
+                "Poll attempt %d/%d failed for %s; returning last known data",
+                self._consecutive_failures,
+                DEFAULT_MAX_POLL_FAILURES,
+                self.address,
+            )
+            return self._last_successful_data
+
+        self._consecutive_failures = 0
+        self._last_successful_data = data
+        return data
+
+    async def _poll_device(self) -> dict[str, float | None]:
         """Connect to device, read all sensors, return parsed data."""
         ble_device = bluetooth.async_ble_device_from_address(
             self.hass, self.address, connectable=True

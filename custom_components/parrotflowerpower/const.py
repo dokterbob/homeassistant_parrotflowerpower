@@ -6,8 +6,14 @@ from datetime import timedelta
 DOMAIN = "parrotflowerpower"
 LOGGER = logging.getLogger("custom_components.parrotflowerpower")
 
-# Default polling interval (seconds)
-DEFAULT_POLL_INTERVAL = timedelta(seconds=600)
+# Default polling interval
+DEFAULT_POLL_INTERVAL = timedelta(minutes=15)
+
+# Maximum random jitter (seconds) added to poll interval to stagger device reads
+DEFAULT_POLL_JITTER_SECONDS = 60
+
+# Consecutive poll failures before sensors are marked unavailable
+DEFAULT_MAX_POLL_FAILURES = 4
 
 # GATT characteristic UUIDs
 UUID_BATTERY = "00002a19-0000-1000-8000-00805f9b34fb"
